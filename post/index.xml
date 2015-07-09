@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on DevLog</title>
+    <link>http://localhost:1313/post/</link>
+    <description>Recent content in Posts on DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© 2015 M. Hofman</copyright>
+    <lastBuildDate>Thu, 09 Jul 2015 11:06:31 +0200</lastBuildDate>
+    <atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Why clever code is not always that clever</title>
+      <link>http://localhost:1313/2015/07/09/why-clever-code-is-not-always-that-clever/</link>
+      <pubDate>Thu, 09 Jul 2015 11:06:31 +0200</pubDate>
+      
+      <guid>http://localhost:1313/2015/07/09/why-clever-code-is-not-always-that-clever/</guid>
+      <description>&lt;p&gt;Readability of code is important, maybe one  of the important
+things.&lt;/p&gt;
+
+&lt;p&gt;A while ago I came acros this quote in a blogpost:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;“hey, the &amp;gt;8=3 operator in this obscure paper on ouroboromorphic sapphotriplets could save me 10 lines of code, I’d better include it. My  coworkers won’t have trouble understanding it as the meaning is clearly expressed in the type signature: (PrimMonad W, PoshFunctor Y, ReichsLens S) =&amp;gt; W Y S ((I -&amp;gt; W) -&amp;gt; Y) -&amp;gt; G -&amp;gt; Bool”.&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
