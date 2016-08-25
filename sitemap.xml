@@ -2,8 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://maikelh.github.io/</loc>
-    <priority>0</priority>
+    <loc>http://www.maikel-hofman.nl/</loc>
+    <lastmod>2016-08-22T16:34:28+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.maikel-hofman.nl/post/disabling-gke-loadbalancer-in-kubernetes/</loc>
+    <lastmod>2016-08-22T16:34:28+02:00</lastmod>
   </url>
   
 </urlset>
