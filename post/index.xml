@@ -3,7 +3,7 @@
   <channel>
       <title>Posts on Maikel&#39;s Tech Blog </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>http://www.maikel-hofman.nl/post/</link>
+    <link>http://maikelh.github.io/post/</link>
     <language>en-us</language>
     
     
@@ -11,10 +11,10 @@
     
     <item>
       <title>Disabling GKE load balancer in Kubernetes</title>
-      <link>http://www.maikel-hofman.nl/post/disabling-gke-loadbalancer-in-kubernetes/</link>
+      <link>http://maikelh.github.io/post/disabling-gke-loadbalancer-in-kubernetes/</link>
       <pubDate>Mon, 22 Aug 2016 16:34:28 CEST</pubDate>
       
-      <guid>http://www.maikel-hofman.nl/post/disabling-gke-loadbalancer-in-kubernetes/</guid>
+      <guid>http://maikelh.github.io/post/disabling-gke-loadbalancer-in-kubernetes/</guid>
       <description>
 
 &lt;p&gt;For a project we run a kubernetes cluster using the &lt;a href=&#34;https://cloud.google.com/container-engine/&#34;&gt;Google Container Engine (GKE)&lt;/a&gt;. GKE provides a lot functionality out of the box including automatic configuration of load balancer using the kubernetes ingress resources. When you configure an ingress resource in kubernetes it will automatically create an GLCB load balancer with an external IP adress and route traffice into the cluster according the rules you set in the ingress resource.&lt;/p&gt;
