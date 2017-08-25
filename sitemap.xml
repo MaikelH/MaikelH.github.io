@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://maikelh.github.io/</loc>
-    <lastmod>2016-08-22T16:34:28+02:00</lastmod>
+    <loc>https://blog.chronos-technology.nl/post/text-search-search-engine-part-1/</loc>
+    <lastmod>2017-08-08T19:00:44+02:00</lastmod>
   </url>
   
   <url>
-    <loc>http://maikelh.github.io/post/disabling-gke-loadbalancer-in-kubernetes/</loc>
-    <lastmod>2016-08-22T16:34:28+02:00</lastmod>
+    <loc>https://blog.chronos-technology.nl/post/disabling-gke-load-balancer-in-kubernetes/</loc>
+    <lastmod>2016-08-22T22:57:48+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronos-technology.nl/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronos-technology.nl/</loc>
+    <lastmod>2017-08-08T19:00:44+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronos-technology.nl/post/</loc>
+    <lastmod>2017-08-08T19:00:44+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.chronos-technology.nl/tags/</loc>
+    <priority>0</priority>
   </url>
   
 </urlset>

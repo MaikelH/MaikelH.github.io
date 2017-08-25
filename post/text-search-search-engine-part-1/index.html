@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="keyword 1, keyword 2, keyword 3" name="keywords">
+<meta content="Maikel Hofman" name="author">
+<meta property="og:title" content="Building an Text Search Search Engine Part 1 - Maikel&#39;s Blog">
+<meta property="og:url" content="https://blog.chronos-technology.nl/post/text-search-search-engine-part-1/">
+<meta property="og:description" content="Your description here">
+<meta property="og:type" content="website" />
+<title>Building an Text Search Search Engine Part 1 | Maikel&#39;s Blog</title>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<link rel="stylesheet" href="https://blog.chronos-technology.nl/css/style.css">
+<link rel="shortcut icon" href="https://blog.chronos-technology.nl/wave.ico">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css">
+
+
+<link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+
+</head>
+
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://blog.chronos-technology.nl"><h1 class="title is-4">Maikel&#39;s Blog</h1></a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile">
+          
+          <a class="level-item" href="https://github.com/maikelh" target="_blank">
+            <span class="icon">
+              <i class="fa fa-github"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="https://gitlab.com/maikelhofman" target="_blank">
+            <span class="icon">
+              <i class="fa fa-gitlab"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="https://twitter.com/CarducciMH" target="_blank">
+            <span class="icon">
+              <i class="fa fa-twitter"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="https://nl.linkedin.com/in/maikelhofman" target="_blank">
+            <span class="icon">
+              <i class="fa fa-linkedin-square"></i>
+            </span>
+          </a>
+          
+          <a class="level-item" href="/index.xml" target="_blank">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+          </a>
+          
+        </nav>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Building an Text Search Search Engine Part 1</h1>
+    <h2 class="subtitle is-5">August 8, 2017 by Maikel Hofman</h2>
+    
+    <div class="content">
+      
+
+<p>Last week I was working on a side project of mine were we needed to do a text search through a bunch of titles. The quick and dirty way to solve this was to use a %LIKE% in the database WHERE clause. This is ofcourse a very crude way of searching, but for the initial implementation it was good enough. But then my mind started to wander, how can we improve this? My experience with ElasticSearch gave me an idea to use n-grams for this.</p>
+
+<h3 id="the-problem">The problem</h3>
+
+<p>So we have a collection of titles ( in this case product names ):</p>
+
+<ul>
+<li>Potato</li>
+<li>Potatoes</li>
+<li>Potatosalad</li>
+<li>potassium</li>
+</ul>
+
+<p>Now we have a searchterm say <code>potato</code>. Searching through this collection with a like statement will return the following set:</p>
+
+<ul>
+<li>Potato</li>
+<li>Potatoes</li>
+<li>Potatosalad</li>
+</ul>
+
+<p>This result is pretty decent, the only problem here is that the ordering is essentially random. It depends on the order the data is stored in the database.</p>
+
+<p>Now let’s say the user types in pototo, using the %LIKE% query this will not return any matches. What we want is that even when the user makes a typo
+relevant results are returned. Also we want to know what the best search result is. One way to do this is to use n-grams.</p>
+
+<h3 id="n-grams">n-grams</h3>
+
+<p>So what are n-grams, luckily we have wikipedia which provides a good starting point.</p>
+
+<blockquote>
+<p>In the fields of computational linguistics and probability, an n-gram is a contiguous sequence of n items from a given sequence of text or speech. The items can be phonemes, syllables, letters, words or base pairs according to the application. The n-grams typically are collected from a text or speech corpus. When the items are words, n-grams may also be called shingles.</p>
+</blockquote>
+
+<p>N can be any number, that means we have a 1-gram, 2-gram, 3-gram etcetera. A 2-gram for the word potato we used before will look like this.</p>
+
+<p><code>po - ot - ta - at - to</code></p>
+
+<p>A 3-gram like this:</p>
+
+<p><code>pot - ota - tat - ato</code></p>
+
+<h3 id="full-example">Full example</h3>
+
+<p>For this example we will have 5 terms to search through: aardbei, aardappel, kandei, haard and, baard (these words are dutch :) ). The first step will be to split the
+terms into n-grams. To keep it simple we will only be looking at 2-grams. In a real world scenario you probably want to use an combination of different n-grams. Also
+every term will be given an id to make it easier to reference them.</p>
+
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>term</th>
+<th>n-grams</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>aardbei</td>
+<td>aa, ar, rd, db, be, ei</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>aardappel</td>
+<td>aa, ar, rd, da, ap, pe, el</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>kandei</td>
+<td>ka, an, nd, de, ei</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>haard</td>
+<td>ha ,aa, ar, rd</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>baard</td>
+<td>ba, aa, ar, rd</td>
+</tr>
+</tbody>
+</table>
+
+<p>So let’s say we want to search for the word baard. The first step is to split the search term into n-grams. This will lead to the following the n-grams: ba, aa, ar, rd. For every n-gram we can look into the above
+table to find out which id it matches. Doing that for every n-gram will lead to the following table.</p>
+
+<table>
+<thead>
+<tr>
+<th>n- gram</th>
+<th>id&rsquo;s</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>ba</td>
+<td>5</td>
+</tr>
+
+<tr>
+<td>aa</td>
+<td>1,2,4,5</td>
+</tr>
+
+<tr>
+<td>ar</td>
+<td>1,2,4,5</td>
+</tr>
+
+<tr>
+<td>rd</td>
+<td>1,2,4,5</td>
+</tr>
+</tbody>
+</table>
+
+<p>To find out what the best match we can count the times an id is in the table. In this case there are only a limited number of entries so it easy to see that id number 5 has 4 entries en the other numbers only 4. This means <code>baard</code> is the best search result. This table can also be used to rank the different search results.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Using n-grams it easy to setup an text search. In the next part we will implement an custom search index, so we can use in a web application.</p>
+
+    </div>
+    
+        <div class="nav-left">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.chronos-technology.nl%2fpost%2ftext-search-search-engine-part-1%2f" title="Share on Facebook" target="_blank"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.chronos-technology.nl%2fpost%2ftext-search-search-engine-part-1%2f" title="Share on Google+" target="_blank"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.chronos-technology.nl%2fpost%2ftext-search-search-engine-part-1%2f" title="Share on LinkedIn" target="_blank"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=Building%20an%20Text%20Search%20Search%20Engine%20Part%201 - https%3a%2f%2fblog.chronos-technology.nl%2fpost%2ftext-search-search-engine-part-1%2f" title="Tweet this" target="_blank"><span class="fa fa-twitter fa-2x"></span></a>
+    <a class="nav-item" href="http://www.reddit.com/submit?url=https%3a%2f%2fblog.chronos-technology.nl%2fpost%2ftext-search-search-engine-part-1%2f&title=Building%20an%20Text%20Search%20Search%20Engine%20Part%201" title="Share on Reddit" target="_blank"><span class="fa fa-reddit-alien fa-2x" aria-hidden="true"></span></a>
+    
+    </div>
+    
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <aside><div id="disqus_thread"></div></aside>
+    <script type="text/javascript">
+      var disqus_shortname = 'maikel-blog';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; 2017 | Follow on <a href="https://twitter.com/CarducciMH" target="_blank">Twitter</a> | <a href="http://gohugo.io" target="_blank">Hugo</a> ♥</p>
+  </div>
+</section>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js" integrity="sha256-+bhVTaRmJ/c07eV80nU8gD2cBBF0rYkf1txqXlrbvb0=" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/go.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/dockerfile.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'trackingcode', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+</body>
