@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Maikel&#39;s Blog</title>
-    <link>https://blog.chronos-technology.nl/</link>
+    <link>http://blog.chronos-technology.nl/</link>
     <description>Recent content on Maikel&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>&amp;copy; 2017 | Follow on &lt;a href=&#34;https://twitter.com/CarducciMH&#34; target=&#34;_blank&#34;&gt;Twitter&lt;/a&gt; | &lt;a href=&#34;http://gohugo.io&#34; target=&#34;_blank&#34;&gt;Hugo&lt;/a&gt; ♥</copyright>
     <lastBuildDate>Tue, 08 Aug 2017 19:00:44 +0200</lastBuildDate>
     
-	<atom:link href="https://blog.chronos-technology.nl/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://blog.chronos-technology.nl/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Building an Text Search Search Engine Part 1</title>
-      <link>https://blog.chronos-technology.nl/post/text-search-search-engine-part-1/</link>
+      <link>http://blog.chronos-technology.nl/post/text-search-search-engine-part-1/</link>
       <pubDate>Tue, 08 Aug 2017 19:00:44 +0200</pubDate>
       
-      <guid>https://blog.chronos-technology.nl/post/text-search-search-engine-part-1/</guid>
+      <guid>http://blog.chronos-technology.nl/post/text-search-search-engine-part-1/</guid>
       <description>Last week I was working on a side project of mine were we needed to do a text search through a bunch of titles. The quick and dirty way to solve this was to use a %LIKE% in the database WHERE clause. This is ofcourse a very crude way of searching, but for the initial implementation it was good enough. But then my mind started to wander, how can we improve this?</description>
     </item>
     
     <item>
       <title>Disabling GKE load balancer in Kubernetes</title>
-      <link>https://blog.chronos-technology.nl/post/disabling-gke-load-balancer-in-kubernetes/</link>
+      <link>http://blog.chronos-technology.nl/post/disabling-gke-load-balancer-in-kubernetes/</link>
       <pubDate>Mon, 22 Aug 2016 22:57:48 +0200</pubDate>
       
-      <guid>https://blog.chronos-technology.nl/post/disabling-gke-load-balancer-in-kubernetes/</guid>
+      <guid>http://blog.chronos-technology.nl/post/disabling-gke-load-balancer-in-kubernetes/</guid>
       <description>For a project we run a kubernetes cluster using the Google Container Engine (GKE). GKE provides a lot functionality out of the box including automatic configuration of load balancer using the kubernetes ingress resources. When you configure an ingress resource in kubernetes it will automatically create an GLCB load balancer with an external IP adress and route traffice into the cluster according the rules you set in the ingress resource.</description>
     </item>
     
